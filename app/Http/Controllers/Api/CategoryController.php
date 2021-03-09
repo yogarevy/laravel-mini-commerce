@@ -11,7 +11,46 @@ use Webpatser\Uuid\Uuid;
 
 class CategoryController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return array
+     */
+    public function index(Request $request)
+    {
+        try {
+            $search_term = $request->input('search');
+            $filterStatus = $request->has('status') ? $request->input('status') : 'all';
+            $limit = $request->has('limit') ? $request->input('limit') : 10;
+            $sort = $request->has('sort') ? $request->input('sort') : 'updated_at';
+            $order = $request->has('order') ? $request->input('order') : 'DESC';
+            $status = $request->has('status') ? $request->input('status') : null;
+            $conditions = '1 = 1';
+            if (!empty($search_term)) {
+                $conditions .= " AND category_name LIKE LOWER('%$search_term%')";
+            }
+            if ($filterStatus != 'all') {
+                $conditions .= " AND category_status = $filterStatus";
+            }
+            $paged = Category::sql()
+                ->whereRaw($conditions);
+
+            if ($status) {
+                if ($status == 1 || $status == true || $status == 'true' || $status == 'active') {
+                    $status = 1;
+                }
+                $paged = $paged->where('category_status', $status);
+            }
+
+            $paged = $paged
+                ->orderBy($sort, $order)
+                ->paginate($limit);
+            return ResponseStd::paginated($paged, Category::count());
+        } catch (\Exception $e) {
+            return ResponseStd::fail($e->getMessage());
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
