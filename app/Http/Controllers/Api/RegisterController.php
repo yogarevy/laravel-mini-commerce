@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Register\CreateRequest;
 use App\Libraries\ResponseStd;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RegisterController extends Controller
 {
@@ -33,7 +34,7 @@ class RegisterController extends Controller
             return ResponseStd::okNoOutput($messages = 'Success Registration.');
         } catch (\Exception $e) {
             \DB::rollback();
-            return ResponseStd::fail($e->getMessage(), $request->method(), $messages='Registration Failed.');
+            return ResponseStd::fail($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR, $messages='Registration Failed.');
         }
     }
 }
