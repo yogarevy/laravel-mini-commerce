@@ -15,6 +15,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return array
      */
     public function index(Request $request)
@@ -78,17 +79,17 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update category.
+     * Update a category.
      *
-     * @param CreateRequest $request
+     * @param $id
+     * @param UpdateRequest $request
      * @return array
-     * @throws \Exception
      */
     public function update($id, UpdateRequest $request)
     {
         \DB::beginTransaction();
         try {
-            $item =Category::findOrFail($id);
+            $item = Category::findOrFail($id);
             $item->update([
                 'category_name' => $request->category_name,
                 'category_status' => !$request->category_status ? false : true,
@@ -98,6 +99,23 @@ class CategoryController extends Controller
             return ResponseStd::okSingle($item, $messages = 'Success update category.');
         } catch (\Exception $e) {
             \DB::rollBack();
+            return ResponseStd::fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Show a category.
+     *
+     * @param $id
+     * @param Request $request
+     * @return array
+     */
+    public function show($id, Request $request)
+    {
+        try {
+            $item = Category::findOrFail($id);
+            return ResponseStd::okSingle($item, $messages = 'Success show a category.');
+        } catch (\Exception $e) {
             return ResponseStd::fail($e->getMessage());
         }
     }
