@@ -4,9 +4,12 @@ Adalah project latihan aplikasi e-commerce sederhana.
 
 Set configuration Environment
 create file ```.env```
-copy ```.env.example``` to ```.env```
+copy ```.env.example``` to ```.env``` or use bash
+```bash
+cp .env.example .env
+```
 
-lakukan setting database pada ```.env```
+Lakukan setting database pada ```.env```
 
 ```bash
 composer install
@@ -20,7 +23,7 @@ php artisan migrate
 
 Passport Install
 ```bash
-php artisan passport install --uuids
+php artisan passport:install --uuids
 > type yes [enter]
 ```
 
