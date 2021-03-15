@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CreateRequest;
+use App\Http\Requests\Category\UpdateRequest;
 use App\Libraries\ResponseStd;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Creating a new category.
      *
      * @param CreateRequest $request
      * @return array
@@ -70,6 +71,31 @@ class CategoryController extends Controller
             ]);
             \DB::commit();
             return ResponseStd::okSingle($item, $messages = 'Success create category.');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return ResponseStd::fail($e->getMessage());
+        }
+    }
+
+    /**
+     * Update category.
+     *
+     * @param CreateRequest $request
+     * @return array
+     * @throws \Exception
+     */
+    public function update($id, UpdateRequest $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $item =Category::findOrFail($id);
+            $item->update([
+                'category_name' => $request->category_name,
+                'category_status' => !$request->category_status ? false : true,
+                'last_modified_by' => auth('api')->user()->id
+            ]);
+            \DB::commit();
+            return ResponseStd::okSingle($item, $messages = 'Success update category.');
         } catch (\Exception $e) {
             \DB::rollBack();
             return ResponseStd::fail($e->getMessage());

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['as' => 'api::', 'namespace' => 'Api', 'prefix' => 'v1', 'middleware' => ['auth:api']], function () {
     Route::group(['as' => 'category.', 'prefix' => 'category', 'middleware' => ['access']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
-        Route::post('/create', ['as' => 'post', 'uses' => 'CategoryController@create']);
+        Route::post('/create', ['as' => 'post.create', 'uses' => 'CategoryController@create']);
+        Route::post('/update/{id}', ['as' => 'post.update', 'uses' => 'CategoryController@update']);
     });
 });

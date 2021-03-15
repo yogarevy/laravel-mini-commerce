@@ -28,7 +28,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'category_name' => 'required|string|max:150|min:2',
-            'category_status' => '',
+            'category_status' => 'required|boolean',
         ];
     }
 
