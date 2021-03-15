@@ -24,6 +24,6 @@ class AccessMiddleware
             return $next($request);
         }
 
-        return ResponseStd::fail($errors = 'Unauthorized.', JsonResponse::HTTP_FORBIDDEN, $messages = 'Error access.');
+        return ResponseStd::fail($errors = 'Unauthorized access.', JsonResponse::HTTP_FORBIDDEN, $messages = 'Error access. You must be an seller to get access.');
     }
 }
