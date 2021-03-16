@@ -119,4 +119,29 @@ class CategoryController extends Controller
             return ResponseStd::fail($e->getMessage());
         }
     }
+
+    /**
+     * Remove specified a category.
+     *
+     * @param $id
+     * @param Request $request
+     * @return array
+     */
+    public function destroy($id, Request $request)
+    {
+        \DB::beginTransaction();
+        try {
+            $item = Category::findOrFail($id);
+            $item->update([
+                'last_modified_by' => auth('api')->user()->id,
+                'deleted_by' => auth('api')->user()->id
+            ]);
+            $item->delete();
+            \DB::commit();
+            return ResponseStd::okNoOutput($messages = 'Success delete a category.');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return ResponseStd::fail($e->getMessage());
+        }
+    }
 }

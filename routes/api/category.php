@@ -20,5 +20,6 @@ Route::group(['as' => 'api::', 'namespace' => 'Api', 'prefix' => 'v1', 'middlewa
         Route::post('/create', ['as' => 'create', 'uses' => 'CategoryController@create']);
         Route::post('/update/{id}', ['as' => 'update', 'uses' => 'CategoryController@update']);
         Route::get('/show/{id}', ['as' => 'show', 'uses' => 'CategoryController@show']);
+        Route::delete('/delete/{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
     });
 });
